@@ -1,0 +1,53 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.grahamedgecombe.jterminal:jterminal:jar:1.0.2-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 58, column 15
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] --------------< com.grahamedgecombe.jterminal:jterminal >---------------
+[INFO] Building JTerminal 1.0.2-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.0:enforce (enforce-maven) @ jterminal ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ jterminal ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory C:\Users\thiya\Downloads\mutationtesting-master\mutationtesting-master\src\main\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ jterminal ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 15 source files to C:\Users\thiya\Downloads\mutationtesting-master\mutationtesting-master\target\classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ jterminal ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory C:\Users\thiya\Downloads\mutationtesting-master\mutationtesting-master\src\test\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ jterminal ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ jterminal ---
+[INFO] Surefire report directory: C:\Users\thiya\Downloads\mutationtesting-master\mutationtesting-master\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.grahamedgecombe.jterminal.vt100.TestAnsiControlSequenceParser
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.066 sec
+Running com.grahamedgecombe.jterminal.vt100.TestVt100TerminalModel
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.048 sec
+
+Results :
+
+Tests run: 17, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.477 s
+[INFO] Finished at: 2022-02-09T21:14:40-05:00
+[INFO] ------------------------------------------------------------------------
+

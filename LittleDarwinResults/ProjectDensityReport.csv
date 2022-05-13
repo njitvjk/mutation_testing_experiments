@@ -1,0 +1,15 @@
+java\com\grahamedgecombe\jterminal\AbstractTerminalModel.java,0.36
+java\com\grahamedgecombe\jterminal\JTerminal.java,0.2911392405063291
+java\com\grahamedgecombe\jterminal\package-info.java,0
+java\com\grahamedgecombe\jterminal\TerminalCell.java,0.1
+java\com\grahamedgecombe\jterminal\TerminalModel.java,0
+java\com\grahamedgecombe\jterminal\bell\BeepBellStrategy.java,0.0
+java\com\grahamedgecombe\jterminal\bell\BellStrategy.java,0
+java\com\grahamedgecombe\jterminal\bell\NopBellStrategy.java,0.0
+java\com\grahamedgecombe\jterminal\bell\package-info.java,0
+java\com\grahamedgecombe\jterminal\vt100\AnsiControlSequence.java,0.17647058823529413
+java\com\grahamedgecombe\jterminal\vt100\AnsiControlSequenceListener.java,0
+java\com\grahamedgecombe\jterminal\vt100\AnsiControlSequenceParser.java,0.28169014084507044
+java\com\grahamedgecombe\jterminal\vt100\package-info.java,0
+java\com\grahamedgecombe\jterminal\vt100\SgrColor.java,0.0
+java\com\grahamedgecombe\jterminal\vt100\Vt100TerminalModel.java,0.34944237918215615

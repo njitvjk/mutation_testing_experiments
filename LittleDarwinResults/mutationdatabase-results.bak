@@ -1,0 +1,6 @@
+'java\\com\\grahamedgecombe\\jterminal\\AbstractTerminalModel.java', (0, 259)
+'java\\com\\grahamedgecombe\\jterminal\\JTerminal.java', (512, 327)
+'java\\com\\grahamedgecombe\\jterminal\\TerminalCell.java', (1024, 40)
+'java\\com\\grahamedgecombe\\jterminal\\vt100\\AnsiControlSequence.java', (1536, 53)
+'java\\com\\grahamedgecombe\\jterminal\\vt100\\AnsiControlSequenceParser.java', (2048, 285)
+'java\\com\\grahamedgecombe\\jterminal\\vt100\\Vt100TerminalModel.java', (2560, 1323)

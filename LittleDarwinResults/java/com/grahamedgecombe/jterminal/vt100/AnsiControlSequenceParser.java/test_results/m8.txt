@@ -1,0 +1,3 @@
+Test003,Testobject size is :0
+Test006,object size is :1
+Test009,object size is :1

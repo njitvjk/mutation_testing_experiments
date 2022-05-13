@@ -1,0 +1,5 @@
+AbstractTerminalModel.clear( );4;3;8
+AbstractTerminalModel.moveCursorBack( int n );3;3;10
+AbstractTerminalModel.moveCursorDown( int n );4;3;11
+AbstractTerminalModel.moveCursorForward( int n );4;3;11
+AbstractTerminalModel.moveCursorUp( int n );3;3;10

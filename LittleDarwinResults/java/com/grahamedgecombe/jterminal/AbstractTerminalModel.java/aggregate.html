@@ -1,0 +1,137 @@
+<!DOCTYPE html><head><title>LittleDarwin Aggregate Mutation Report</title> <style type='text/css'> body { font-family: "Carlito", "Calibri", "Helvetica Neue", sans-serif;}
+                    .code { font-family: monospace; font-size: medium; }
+                    .methodLine { background: white; }
+                    .outsideLine { background: lightgray; } 
+                    .tooltip { position: relative; display: inline-block; }
+                    .tooltip .tooltiptext { visibility: hidden; display: block;
+                        background-color: #006400; color: #ffffff; text-align: left;
+                        border-radius: 0.3em; padding: 0.5em 0.5em; position: absolute; top: 125%; z-index: 200;}
+                    .tooltip:hover .tooltiptext { visibility: visible; } .LogicalOperatorReplacement { background: #F0E68C; } .ShiftOperatorReplacement { background: #9ACD32; } .ConditionalOperatorReplacement { background: #87CEFA; } .ArithmeticOperatorReplacementBinary { background: #FFB6C1; } .ArithmeticOperatorReplacementShortcut { background: #FF00FF; } .RelationalOperatorReplacement { background: #FFA07A; } .ConditionalOperatorDeletion { background: #FFD700; } .ArithmeticOperatorReplacementUnary { background: #DDA0DD; } .GenericTraditionalMutationOperator { background: #FFFFF0; } .AssignmentOperatorReplacementShortcut { background: #B0C4DE; } </style></head><body><h1>LittleDarwin Aggregate Mutation Report</h1><p>Average Density: 0.36</p><div><pre class="code"><span class="outsideLine"><i>0001</i> /*                                                                               
+</span><span class="outsideLine"><i>0002</i>  * Copyright (c) 2009-2011 Graham Edgecombe.                                     
+</span><span class="outsideLine"><i>0003</i>  *                                                                               
+</span><span class="outsideLine"><i>0004</i>  * Permission is hereby granted, free of charge, to any person obtaining a copy  
+</span><span class="outsideLine"><i>0005</i>  * of this software and associated documentation files (the "Software"), to      
+</span><span class="outsideLine"><i>0006</i>  * deal in the Software without restriction, including without limitation the    
+</span><span class="outsideLine"><i>0007</i>  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or   
+</span><span class="outsideLine"><i>0008</i>  * sell copies of the Software, and to permit persons to whom the Software is    
+</span><span class="outsideLine"><i>0009</i>  * furnished to do so, subject to the following conditions:                      
+</span><span class="outsideLine"><i>0010</i>  *                                                                               
+</span><span class="outsideLine"><i>0011</i>  * The above copyright notice and this permission notice shall be included in    
+</span><span class="outsideLine"><i>0012</i>  * all copies or substantial portions of the Software.                           
+</span><span class="outsideLine"><i>0013</i>  *                                                                               
+</span><span class="outsideLine"><i>0014</i>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR    
+</span><span class="outsideLine"><i>0015</i>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,      
+</span><span class="outsideLine"><i>0016</i>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE   
+</span><span class="outsideLine"><i>0017</i>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        
+</span><span class="outsideLine"><i>0018</i>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING       
+</span><span class="outsideLine"><i>0019</i>  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER           
+</span><span class="outsideLine"><i>0020</i>  * DEALINGS IN THE SOFTWARE.                                                     
+</span><span class="outsideLine"><i>0021</i>  */                                                                              
+</span><span class="outsideLine"><i>0022</i>                                                                                  
+</span><span class="outsideLine"><i>0023</i> package com.grahamedgecombe.jterminal;                                           
+</span><span class="outsideLine"><i>0024</i>                                                                                  
+</span><span class="outsideLine"><i>0025</i> /**                                                                              
+</span><span class="outsideLine"><i>0026</i>  * A {@link TerminalModel} which implements some common behaviour.               
+</span><span class="outsideLine"><i>0027</i>  * @author Graham Edgecombe                                                      
+</span><span class="outsideLine"><i>0028</i>  */                                                                              
+</span><span class="outsideLine"><i>0029</i> public abstract class AbstractTerminalModel implements TerminalModel {           
+</span><span class="outsideLine"><i>0030</i>                                                                                  
+</span><span class="outsideLine"><i>0031</i>         @Override                                                                
+</span><span class="methodLine"><i>0032</i>         public void clear() {                                                    
+</span><span class="methodLine"><i>0033</i>                 int rows = getRows(), columns = getColumns();                    
+</span><span class="methodLine"><i>0034</i>                 for (int column = 0; column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 257</span><</span> columns; column<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 412</span>++</span>) {               
+</span><span class="methodLine"><i>0035</i>                         for (int row = 0; row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 554</span><</span> rows; row<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 656</span>++</span>) {                   
+</span><span class="methodLine"><i>0036</i>                                 setCell(column, row, null);                      
+</span><span class="methodLine"><i>0037</i>                         }                                                        
+</span><span class="methodLine"><i>0038</i>                 }                                                                
+</span><span class="methodLine"><i>0039</i>         }                                                                        
+</span><span class="outsideLine"><i>0040</i>                                                                                  
+</span><span class="outsideLine"><i>0041</i>         @Override                                                                
+</span><span class="methodLine"><i>0042</i>         public void moveCursorBack(int n) {                                      
+</span><span class="methodLine"><i>0043</i>                 if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 263</span><</span> 0) {                                                     
+</span><span class="methodLine"><i>0044</i>                         throw new IllegalArgumentException("n must be positive");
+</span><span class="methodLine"><i>0045</i>                 }                                                                
+</span><span class="methodLine"><i>0046</i>                 int cursorColumn = getCursorColumn() <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 491</span>-</span> n;                        
+</span><span class="methodLine"><i>0047</i>                 if (cursorColumn <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 269</span><</span> 0) {                                          
+</span><span class="methodLine"><i>0048</i>                         cursorColumn = 0;                                        
+</span><span class="methodLine"><i>0049</i>                 }                                                                
+</span><span class="methodLine"><i>0050</i>                 setCursorColumn(cursorColumn);                                   
+</span><span class="methodLine"><i>0051</i>         }                                                                        
+</span><span class="outsideLine"><i>0052</i>                                                                                  
+</span><span class="outsideLine"><i>0053</i>         @Override                                                                
+</span><span class="methodLine"><i>0054</i>         public void moveCursorForward(int n) {                                   
+</span><span class="methodLine"><i>0055</i>                 if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 275</span><</span> 0) {                                                     
+</span><span class="methodLine"><i>0056</i>                         throw new IllegalArgumentException("n must be positive");
+</span><span class="methodLine"><i>0057</i>                 }                                                                
+</span><span class="methodLine"><i>0058</i>                 int columns = getColumns();                                      
+</span><span class="methodLine"><i>0059</i>                 int cursorColumn = getCursorColumn() <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: - 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 506</span>+</span> n;                        
+</span><span class="methodLine"><i>0060</i>                 if (cursorColumn <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 283</span>>=</span> columns) {                                   
+</span><span class="methodLine"><i>0061</i>                         cursorColumn = columns <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 629</span>-</span> 1;                              
+</span><span class="methodLine"><i>0062</i>                 }                                                                
+</span><span class="methodLine"><i>0063</i>                 setCursorColumn(cursorColumn);                                   
+</span><span class="methodLine"><i>0064</i>         }                                                                        
+</span><span class="outsideLine"><i>0065</i>                                                                                  
+</span><span class="outsideLine"><i>0066</i>         @Override                                                                
+</span><span class="methodLine"><i>0067</i>         public void moveCursorDown(int n) {                                      
+</span><span class="methodLine"><i>0068</i>                 if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 289</span><</span> 0) {                                                     
+</span><span class="methodLine"><i>0069</i>                         throw new IllegalArgumentException("n must be positive");
+</span><span class="methodLine"><i>0070</i>                 }                                                                
+</span><span class="methodLine"><i>0071</i>                 int bufferSize = getBufferSize();                                
+</span><span class="methodLine"><i>0072</i>                 int cursorRow = getCursorRow() <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: - 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 521</span>+</span> n;                              
+</span><span class="methodLine"><i>0073</i>                 if (cursorRow <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 297</span>>=</span> bufferSize) {                                   
+</span><span class="methodLine"><i>0074</i>                         cursorRow = bufferSize <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 639</span>-</span> 1;                              
+</span><span class="methodLine"><i>0075</i>                 }                                                                
+</span><span class="methodLine"><i>0076</i>                 setCursorRow(cursorRow);                                         
+</span><span class="methodLine"><i>0077</i>         }                                                                        
+</span><span class="outsideLine"><i>0078</i>                                                                                  
+</span><span class="outsideLine"><i>0079</i>         @Override                                                                
+</span><span class="methodLine"><i>0080</i>         public void moveCursorUp(int n) {                                        
+</span><span class="methodLine"><i>0081</i>                 if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 303</span><</span> 0) {                                                     
+</span><span class="methodLine"><i>0082</i>                         throw new IllegalArgumentException("n must be positive");
+</span><span class="methodLine"><i>0083</i>                 }                                                                
+</span><span class="methodLine"><i>0084</i>                 int cursorRow = getCursorRow() <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 534</span>-</span> n;                              
+</span><span class="methodLine"><i>0085</i>                 if (cursorRow <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 309</span><</span> 0) {                                             
+</span><span class="methodLine"><i>0086</i>                         cursorRow = 0;                                           
+</span><span class="methodLine"><i>0087</i>                 }                                                                
+</span><span class="methodLine"><i>0088</i>                 setCursorRow(cursorRow);                                         
+</span><span class="methodLine"><i>0089</i>         }                                                                        
+</span><span class="outsideLine"><i>0090</i>                                                                                  
+</span><span class="outsideLine"><i>0091</i> }                                                                                
+</span><span class="outsideLine"><i>0092</i>                                                                                  
+</span><span class="outsideLine"><i>0093</i>                                                                                  </pre></div><footer><p style="font-size: small">Report generated by LittleDarwin 0.10.6 </p></footer></body></html>

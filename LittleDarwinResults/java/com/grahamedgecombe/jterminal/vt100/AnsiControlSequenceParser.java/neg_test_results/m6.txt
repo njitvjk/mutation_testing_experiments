@@ -1,0 +1,32 @@
+Test025,Exception :java.lang.AssertionError
+Test029,Exception :org.junit.ComparisonFailure
+Test0032,Exception:java.lang.AssertionError
+Test001,Exception :java.lang.AssertionError
+Test016,object size is :1
+Test015,object size is :1
+Test003,object size is :0
+Test006,object size is :1
+Test018,object size is :1
+Test017,object size is :1
+Test007,Exception :java.lang.AssertionError
+Test021,Exception :java.lang.AssertionError
+Test020,Exception :java.lang.AssertionError
+Test026,Exception :java.lang.AssertionError
+Test011,object size is :1
+Test013,object size is :1
+Test005,Exception :java.lang.AssertionError
+Test008,Exception :java.lang.AssertionError
+Test024,Exception :java.lang.AssertionError
+Test004,Exception :java.lang.AssertionError
+Test027,Exception :java.lang.AssertionError
+Test014,object size is :1
+Test019,object size is :1
+Test002,Exception :java.lang.AssertionError
+Test023,Exception :java.lang.AssertionError
+Test022,Exception :java.lang.AssertionError
+Test010,object size is :1
+Test030,object size is :2
+Test028,Exception :java.lang.AssertionError
+Test009,object size is :1
+Test012,object size is :1
+Test031,Exception:IndexOutofBounds

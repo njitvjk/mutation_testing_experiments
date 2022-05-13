@@ -1,0 +1,205 @@
+<!DOCTYPE html><head><title>LittleDarwin Aggregate Mutation Report</title> <style type='text/css'> body { font-family: "Carlito", "Calibri", "Helvetica Neue", sans-serif;}
+                    .code { font-family: monospace; font-size: medium; }
+                    .methodLine { background: white; }
+                    .outsideLine { background: lightgray; } 
+                    .tooltip { position: relative; display: inline-block; }
+                    .tooltip .tooltiptext { visibility: hidden; display: block;
+                        background-color: #006400; color: #ffffff; text-align: left;
+                        border-radius: 0.3em; padding: 0.5em 0.5em; position: absolute; top: 125%; z-index: 200;}
+                    .tooltip:hover .tooltiptext { visibility: visible; } .LogicalOperatorReplacement { background: #F0E68C; } .ShiftOperatorReplacement { background: #9ACD32; } .ConditionalOperatorReplacement { background: #87CEFA; } .ArithmeticOperatorReplacementBinary { background: #FFB6C1; } .ArithmeticOperatorReplacementShortcut { background: #FF00FF; } .RelationalOperatorReplacement { background: #FFA07A; } .ConditionalOperatorDeletion { background: #FFD700; } .ArithmeticOperatorReplacementUnary { background: #DDA0DD; } .GenericTraditionalMutationOperator { background: #FFFFF0; } .AssignmentOperatorReplacementShortcut { background: #B0C4DE; } </style></head><body><h1>LittleDarwin Aggregate Mutation Report</h1><p>Average Density: 0.28</p><div><pre class="code"><span class="outsideLine"><i>0001</i> /*                                                                                                             
+</span><span class="outsideLine"><i>0002</i>  * Copyright (c) 2009-2011 Graham Edgecombe.                                                                   
+</span><span class="outsideLine"><i>0003</i>  *                                                                                                             
+</span><span class="outsideLine"><i>0004</i>  * Permission is hereby granted, free of charge, to any person obtaining a copy                                
+</span><span class="outsideLine"><i>0005</i>  * of this software and associated documentation files (the "Software"), to                                    
+</span><span class="outsideLine"><i>0006</i>  * deal in the Software without restriction, including without limitation the                                  
+</span><span class="outsideLine"><i>0007</i>  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or                                 
+</span><span class="outsideLine"><i>0008</i>  * sell copies of the Software, and to permit persons to whom the Software is                                  
+</span><span class="outsideLine"><i>0009</i>  * furnished to do so, subject to the following conditions:                                                    
+</span><span class="outsideLine"><i>0010</i>  *                                                                                                             
+</span><span class="outsideLine"><i>0011</i>  * The above copyright notice and this permission notice shall be included in                                  
+</span><span class="outsideLine"><i>0012</i>  * all copies or substantial portions of the Software.                                                         
+</span><span class="outsideLine"><i>0013</i>  *                                                                                                             
+</span><span class="outsideLine"><i>0014</i>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR                                  
+</span><span class="outsideLine"><i>0015</i>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                                    
+</span><span class="outsideLine"><i>0016</i>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE                                 
+</span><span class="outsideLine"><i>0017</i>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                                      
+</span><span class="outsideLine"><i>0018</i>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING                                     
+</span><span class="outsideLine"><i>0019</i>  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER                                         
+</span><span class="outsideLine"><i>0020</i>  * DEALINGS IN THE SOFTWARE.                                                                                   
+</span><span class="outsideLine"><i>0021</i>  */                                                                                                            
+</span><span class="outsideLine"><i>0022</i>                                                                                                                
+</span><span class="outsideLine"><i>0023</i> package com.grahamedgecombe.jterminal.vt100;                                                                   
+</span><span class="outsideLine"><i>0024</i>                                                                                                                
+</span><span class="outsideLine"><i>0025</i> import java.io.IOException;                                                                                    
+</span><span class="outsideLine"><i>0026</i> import java.io.Reader;                                                                                         
+</span><span class="outsideLine"><i>0027</i> import java.io.StringReader;                                                                                   
+</span><span class="outsideLine"><i>0028</i>                                                                                                                
+</span><span class="outsideLine"><i>0029</i> /**                                                                                                            
+</span><span class="outsideLine"><i>0030</i>  * A class which parses {@link AnsiControlSequence}s from {@link String}(s).                                   
+</span><span class="outsideLine"><i>0031</i>  * @author Graham Edgecombe                                                                                    
+</span><span class="outsideLine"><i>0032</i>  */                                                                                                            
+</span><span class="outsideLine"><i>0033</i> class AnsiControlSequenceParser {                                                                              
+</span><span class="outsideLine"><i>0034</i>                                                                                                                
+</span><span class="outsideLine"><i>0035</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0036</i>          * The multi-byte control sequence introducer.                                                         
+</span><span class="outsideLine"><i>0037</i>          */                                                                                                    
+</span><span class="outsideLine"><i>0038</i>         private static final char[] MULTI_CSI = new char[] { 27, '[' };                                        
+</span><span class="outsideLine"><i>0039</i>                                                                                                                
+</span><span class="outsideLine"><i>0040</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0041</i>          * The single-byte control sequence introducer.                                                        
+</span><span class="outsideLine"><i>0042</i>          */                                                                                                    
+</span><span class="outsideLine"><i>0043</i>         private static final char SINGLE_CSI = 155;                                                            
+</span><span class="outsideLine"><i>0044</i>                                                                                                                
+</span><span class="outsideLine"><i>0045</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0046</i>          * The buffer of data from the last call to {@link #parse()}. This is                                  
+</span><span class="outsideLine"><i>0047</i>          * populated with data if an escape sequence is not complete.                                          
+</span><span class="outsideLine"><i>0048</i>          */                                                                                                    
+</span><span class="outsideLine"><i>0049</i>         private StringBuilder buffer = new StringBuilder();                                                    
+</span><span class="outsideLine"><i>0050</i>                                                                                                                
+</span><span class="outsideLine"><i>0051</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0052</i>          * The ANSI control sequence listener.                                                                 
+</span><span class="outsideLine"><i>0053</i>          */                                                                                                    
+</span><span class="outsideLine"><i>0054</i>         private final AnsiControlSequenceListener listener;                                                    
+</span><span class="outsideLine"><i>0055</i>                                                                                                                
+</span><span class="outsideLine"><i>0056</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0057</i>          * Creates the ANSI control sequence parser.                                                           
+</span><span class="outsideLine"><i>0058</i>          * @param listener The listener.                                                                       
+</span><span class="outsideLine"><i>0059</i>          */                                                                                                    
+</span><span class="methodLine"><i>0060</i>         public AnsiControlSequenceParser(AnsiControlSequenceListener listener) {                               
+</span><span class="methodLine"><i>0061</i>                 this.listener = listener;                                                                      
+</span><span class="methodLine"><i>0062</i>         }                                                                                                      
+</span><span class="outsideLine"><i>0063</i>                                                                                                                
+</span><span class="outsideLine"><i>0064</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0065</i>          * Parses the specified string.                                                                        
+</span><span class="outsideLine"><i>0066</i>          * @param str The string to parse.                                                                     
+</span><span class="outsideLine"><i>0067</i>          */                                                                                                    
+</span><span class="methodLine"><i>0068</i>         public void parse(String str) {                                                                        
+</span><span class="methodLine"><i>0069</i>                 if (buffer.length() <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: <= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 293</span>></span> 0) {                                                                     
+</span><span class="methodLine"><i>0070</i>                         str = buffer.toString().concat(str);                                                   
+</span><span class="methodLine"><i>0071</i>                         buffer = new StringBuilder();                                                          
+</span><span class="methodLine"><i>0072</i>                 }                                                                                              
+</span><span class="methodLine"><i>0073</i>                 Reader reader = new StringReader(str);                                                         
+</span><span class="methodLine"><i>0074</i>                 try {                                                                                          
+</span><span class="methodLine"><i>0075</i>                         try {                                                                                  
+</span><span class="methodLine"><i>0076</i>                                 parse(reader);                                                                 
+</span><span class="methodLine"><i>0077</i>                         } finally {                                                                            
+</span><span class="methodLine"><i>0078</i>                                 reader.close();                                                                
+</span><span class="methodLine"><i>0079</i>                         }                                                                                      
+</span><span class="methodLine"><i>0080</i>                 } catch (IOException ex) {                                                                     
+</span><span class="outsideLine"><i>0081</i>                         /* ignore */                                                                           
+</span><span class="methodLine"><i>0082</i>                 }                                                                                              
+</span><span class="methodLine"><i>0083</i>         }                                                                                                      
+</span><span class="outsideLine"><i>0084</i>                                                                                                                
+</span><span class="outsideLine"><i>0085</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0086</i>          * Parses characters from the specified character reader.                                              
+</span><span class="outsideLine"><i>0087</i>          * @param reader The character reader.                                                                 
+</span><span class="outsideLine"><i>0088</i>          * @throws IOException if an I/O error occurs.                                                         
+</span><span class="outsideLine"><i>0089</i>          */                                                                                                    
+</span><span class="methodLine"><i>0090</i>         private void parse(Reader reader) throws IOException {                                                 
+</span><span class="methodLine"><i>0091</i>                 StringBuilder text = new StringBuilder();                                                      
+</span><span class="methodLine"><i>0092</i>                 int character;                                                                                 
+</span><span class="methodLine"><i>0093</i>                 while ((character = reader.read()) <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: == 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 313</span>!=</span> <span class="ArithmeticOperatorReplacementUnary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementUnary 
+Node ID: 364</span>-</span>1) {                                                    
+</span><span class="methodLine"><i>0094</i>                         boolean introducedControlSequence = false;                                             
+</span><span class="methodLine"><i>0095</i>                         if (character <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 537</span>==</span> SINGLE_CSI) {                                                         
+</span><span class="methodLine"><i>0096</i>                                 introducedControlSequence = true;                                              
+</span><span class="methodLine"><i>0097</i>                         } else if (character <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 596</span>==</span> MULTI_CSI[0]) {                                                
+</span><span class="methodLine"><i>0098</i>                                 int nextCharacter = reader.read();                                             
+</span><span class="methodLine"><i>0099</i>                                 if (nextCharacter <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 853</span>==</span> <span class="ArithmeticOperatorReplacementUnary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementUnary 
+Node ID: 917</span>-</span>1) {                                                     
+</span><span class="methodLine"><i>0100</i>                                         buffer.append((char) character);                                       
+</span><span class="methodLine"><i>0101</i>                                         break;                                                                 
+</span><span class="methodLine"><i>0102</i>                                 } else if (nextCharacter <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 923</span>==</span> MULTI_CSI[1]) {                                    
+</span><span class="methodLine"><i>0103</i>                                         introducedControlSequence = true;                                      
+</span><span class="methodLine"><i>0104</i>                                 } else {                                                                       
+</span><span class="methodLine"><i>0105</i>                                         text.append((char) character);                                         
+</span><span class="methodLine"><i>0106</i>                                         text.append((char) nextCharacter);                                     
+</span><span class="methodLine"><i>0107</i>                                 }                                                                              
+</span><span class="methodLine"><i>0108</i>                         } else {                                                                               
+</span><span class="methodLine"><i>0109</i>                                 text.append((char) character);                                                 
+</span><span class="methodLine"><i>0110</i>                         }                                                                                      
+</span><span class="outsideLine"><i>0111</i>                                                                                                                
+</span><span class="methodLine"><i>0112</i>                         if (introducedControlSequence) {                                                       
+</span><span class="methodLine"><i>0113</i>                                 if (text.length() <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: <= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 805</span>></span> 0) {                                                       
+</span><span class="methodLine"><i>0114</i>                                         listener.parsedString(text.toString());                                
+</span><span class="methodLine"><i>0115</i>                                         text = new StringBuilder();                                            
+</span><span class="methodLine"><i>0116</i>                                 }                                                                              
+</span><span class="methodLine"><i>0117</i>                                 parseControlSequence(reader);                                                  
+</span><span class="methodLine"><i>0118</i>                         }                                                                                      
+</span><span class="methodLine"><i>0119</i>                 }                                                                                              
+</span><span class="outsideLine"><i>0120</i>                                                                                                                
+</span><span class="methodLine"><i>0121</i>                 if (text.length() <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: <= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 317</span>></span> 0) {                                                                       
+</span><span class="methodLine"><i>0122</i>                         listener.parsedString(text.toString());                                                
+</span><span class="methodLine"><i>0123</i>                 }                                                                                              
+</span><span class="methodLine"><i>0124</i>         }                                                                                                      
+</span><span class="outsideLine"><i>0125</i>                                                                                                                
+</span><span class="outsideLine"><i>0126</i>         /**                                                                                                    
+</span><span class="outsideLine"><i>0127</i>          * Parses a control sequence.                                                                          
+</span><span class="outsideLine"><i>0128</i>          * @param reader The character reader.                                                                 
+</span><span class="outsideLine"><i>0129</i>          * @throws IOException if an I/O error occurs.                                                         
+</span><span class="outsideLine"><i>0130</i>          */                                                                                                    
+</span><span class="methodLine"><i>0131</i>         private void parseControlSequence(Reader reader) throws IOException {                                  
+</span><span class="methodLine"><i>0132</i>                 boolean finishedSequence = false;                                                              
+</span><span class="methodLine"><i>0133</i>                 StringBuilder parameters = new StringBuilder();                                                
+</span><span class="methodLine"><i>0134</i>                 int character;                                                                                 
+</span><span class="methodLine"><i>0135</i>                 while ((character = reader.read()) <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: == 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 328</span>!=</span> <span class="ArithmeticOperatorReplacementUnary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementUnary 
+Node ID: 384</span>-</span>1) {                                                    
+</span><span class="methodLine"><i>0136</i>                         if ((character <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 814</span>>=</span> 'a' <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: || 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 753</span>&&</span> character <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: > 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 816</span><=</span> 'z') <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 560</span>||</span> (character <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 817</span>>=</span> 'A' <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: || 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 756</span>&&</span> character <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: > 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 819</span><=</span> 'Z')) {
+</span><span class="methodLine"><i>0137</i>                                 String[] array = parameters.toString().split(";");                             
+</span><span class="methodLine"><i>0138</i>                                 AnsiControlSequence seq = new AnsiControlSequence((char) character, array);    
+</span><span class="methodLine"><i>0139</i>                                 listener.parsedControlSequence(seq);                                           
+</span><span class="outsideLine"><i>0140</i>                                                                                                                
+</span><span class="methodLine"><i>0141</i>                                 finishedSequence = true;                                                       
+</span><span class="methodLine"><i>0142</i>                                 break;                                                                         
+</span><span class="methodLine"><i>0143</i>                         } else {                                                                               
+</span><span class="methodLine"><i>0144</i>                                 parameters.append((char) character);                                           
+</span><span class="methodLine"><i>0145</i>                         }                                                                                      
+</span><span class="methodLine"><i>0146</i>                 }                                                                                              
+</span><span class="methodLine"><i>0147</i>                 if (<span class="ConditionalOperatorDeletion tooltip"><span class="tooltiptext">Mutated Text:   
+Mutation Operator Type: ConditionalOperatorDeletion 
+Node ID: 332</span>!</span>finishedSequence) {                                                                       
+</span><span class="outsideLine"><i>0148</i>                         // not an ideal solution if they used the two byte CSI, but it's                       
+</span><span class="outsideLine"><i>0149</i>                         // easier and cleaner than keeping track of it                                         
+</span><span class="methodLine"><i>0150</i>                         buffer.append((char) SINGLE_CSI);                                                      
+</span><span class="methodLine"><i>0151</i>                         buffer.append(parameters);                                                             
+</span><span class="methodLine"><i>0152</i>                 }                                                                                              
+</span><span class="methodLine"><i>0153</i>         }                                                                                                      
+</span><span class="outsideLine"><i>0154</i>                                                                                                                
+</span><span class="outsideLine"><i>0155</i> }                                                                                                              
+</span><span class="outsideLine"><i>0156</i>                                                                                                                
+</span><span class="outsideLine"><i>0157</i>                                                                                                                </pre></div><footer><p style="font-size: small">Report generated by LittleDarwin 0.10.6 </p></footer></body></html>

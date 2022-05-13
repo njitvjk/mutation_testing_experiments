@@ -1,0 +1,689 @@
+<!DOCTYPE html><head><title>LittleDarwin Aggregate Mutation Report</title> <style type='text/css'> body { font-family: "Carlito", "Calibri", "Helvetica Neue", sans-serif;}
+                    .code { font-family: monospace; font-size: medium; }
+                    .methodLine { background: white; }
+                    .outsideLine { background: lightgray; } 
+                    .tooltip { position: relative; display: inline-block; }
+                    .tooltip .tooltiptext { visibility: hidden; display: block;
+                        background-color: #006400; color: #ffffff; text-align: left;
+                        border-radius: 0.3em; padding: 0.5em 0.5em; position: absolute; top: 125%; z-index: 200;}
+                    .tooltip:hover .tooltiptext { visibility: visible; } .LogicalOperatorReplacement { background: #F0E68C; } .ShiftOperatorReplacement { background: #9ACD32; } .ConditionalOperatorReplacement { background: #87CEFA; } .ArithmeticOperatorReplacementBinary { background: #FFB6C1; } .ArithmeticOperatorReplacementShortcut { background: #FF00FF; } .RelationalOperatorReplacement { background: #FFA07A; } .ConditionalOperatorDeletion { background: #FFD700; } .ArithmeticOperatorReplacementUnary { background: #DDA0DD; } .GenericTraditionalMutationOperator { background: #FFFFF0; } .AssignmentOperatorReplacementShortcut { background: #B0C4DE; } </style></head><body><h1>LittleDarwin Aggregate Mutation Report</h1><p>Average Density: 0.35</p><div><pre class="code"><span class="outsideLine"><i>0001</i> /*                                                                                                                                            
+</span><span class="outsideLine"><i>0002</i>  * Copyright (c) 2009-2011 Graham Edgecombe.                                                                                                  
+</span><span class="outsideLine"><i>0003</i>  *                                                                                                                                            
+</span><span class="outsideLine"><i>0004</i>  * Permission is hereby granted, free of charge, to any person obtaining a copy                                                               
+</span><span class="outsideLine"><i>0005</i>  * of this software and associated documentation files (the "Software"), to                                                                   
+</span><span class="outsideLine"><i>0006</i>  * deal in the Software without restriction, including without limitation the                                                                 
+</span><span class="outsideLine"><i>0007</i>  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or                                                                
+</span><span class="outsideLine"><i>0008</i>  * sell copies of the Software, and to permit persons to whom the Software is                                                                 
+</span><span class="outsideLine"><i>0009</i>  * furnished to do so, subject to the following conditions:                                                                                   
+</span><span class="outsideLine"><i>0010</i>  *                                                                                                                                            
+</span><span class="outsideLine"><i>0011</i>  * The above copyright notice and this permission notice shall be included in                                                                 
+</span><span class="outsideLine"><i>0012</i>  * all copies or substantial portions of the Software.                                                                                        
+</span><span class="outsideLine"><i>0013</i>  *                                                                                                                                            
+</span><span class="outsideLine"><i>0014</i>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR                                                                 
+</span><span class="outsideLine"><i>0015</i>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                                                                   
+</span><span class="outsideLine"><i>0016</i>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE                                                                
+</span><span class="outsideLine"><i>0017</i>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                                                                     
+</span><span class="outsideLine"><i>0018</i>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING                                                                    
+</span><span class="outsideLine"><i>0019</i>  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER                                                                        
+</span><span class="outsideLine"><i>0020</i>  * DEALINGS IN THE SOFTWARE.                                                                                                                  
+</span><span class="outsideLine"><i>0021</i>  */                                                                                                                                           
+</span><span class="outsideLine"><i>0022</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0023</i> package com.grahamedgecombe.jterminal.vt100;                                                                                                  
+</span><span class="outsideLine"><i>0024</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0025</i> import java.awt.Color;                                                                                                                        
+</span><span class="outsideLine"><i>0026</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0027</i> import com.grahamedgecombe.jterminal.AbstractTerminalModel;                                                                                   
+</span><span class="outsideLine"><i>0028</i> import com.grahamedgecombe.jterminal.TerminalCell;                                                                                            
+</span><span class="outsideLine"><i>0029</i> import com.grahamedgecombe.jterminal.TerminalModel;                                                                                           
+</span><span class="outsideLine"><i>0030</i> import com.grahamedgecombe.jterminal.bell.BellStrategy;                                                                                       
+</span><span class="outsideLine"><i>0031</i> import com.grahamedgecombe.jterminal.bell.NopBellStrategy;                                                                                    
+</span><span class="outsideLine"><i>0032</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0033</i> /**                                                                                                                                           
+</span><span class="outsideLine"><i>0034</i>  * A VT100/ANSI-compatible terminal model.                                                                                                    
+</span><span class="outsideLine"><i>0035</i>  * @author Graham Edgecombe                                                                                                                   
+</span><span class="outsideLine"><i>0036</i>  */                                                                                                                                           
+</span><span class="outsideLine"><i>0037</i> public class Vt100TerminalModel extends AbstractTerminalModel {                                                                               
+</span><span class="outsideLine"><i>0038</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0039</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0040</i>          * A {@link AnsiControlSequenceListener} which modifies the                                                                           
+</span><span class="outsideLine"><i>0041</i>          * {@link TerminalModel} appropriately when an event happens.                                                                         
+</span><span class="outsideLine"><i>0042</i>          * @author Graham Edgecombe                                                                                                           
+</span><span class="outsideLine"><i>0043</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0044</i>         private class Vt100Listener implements AnsiControlSequenceListener {                                                                  
+</span><span class="outsideLine"><i>0045</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0046</i>                 /**                                                                                                                           
+</span><span class="outsideLine"><i>0047</i>                  * The saved cursor row.                                                                                                      
+</span><span class="outsideLine"><i>0048</i>                  */                                                                                                                           
+</span><span class="outsideLine"><i>0049</i>                 private int savedCursorRow = <span class="ArithmeticOperatorReplacementUnary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementUnary 
+Node ID: 1442</span>-</span>1;                                                                                              
+</span><span class="outsideLine"><i>0050</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0051</i>                 /**                                                                                                                           
+</span><span class="outsideLine"><i>0052</i>                  * The saved cursor column.                                                                                                   
+</span><span class="outsideLine"><i>0053</i>                  */                                                                                                                           
+</span><span class="outsideLine"><i>0054</i>                 private int savedCursorColumn = <span class="ArithmeticOperatorReplacementUnary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementUnary 
+Node ID: 1444</span>-</span>1;                                                                                           
+</span><span class="outsideLine"><i>0055</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0056</i>                 @Override                                                                                                                     
+</span><span class="methodLine"><i>0057</i>                 public void parsedControlSequence(AnsiControlSequence seq) {                                                                  
+</span><span class="methodLine"><i>0058</i>                         char command = seq.getCommand();                                                                                      
+</span><span class="methodLine"><i>0059</i>                         String[] parameters = seq.getParameters();                                                                            
+</span><span class="outsideLine"><i>0060</i>                                                                                                                                               
+</span><span class="methodLine"><i>0061</i>                         switch (command) {                                                                                                    
+</span><span class="methodLine"><i>0062</i>                         case 'A':                                                                                                             
+</span><span class="methodLine"><i>0063</i>                         case 'B':                                                                                                             
+</span><span class="methodLine"><i>0064</i>                         case 'C':                                                                                                             
+</span><span class="methodLine"><i>0065</i>                         case 'D':                                                                                                             
+</span><span class="methodLine"><i>0066</i>                                 int n = 1;                                                                                                    
+</span><span class="methodLine"><i>0067</i>                                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2142</span>==</span> 1) {                                                                                 
+</span><span class="methodLine"><i>0068</i>                                         n = Integer.parseInt(parameters[0]);                                                                  
+</span><span class="methodLine"><i>0069</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0070</i>                                 if (command <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2146</span>==</span> 'A') {                                                                                         
+</span><span class="methodLine"><i>0071</i>                                         moveCursorUp(n);                                                                                      
+</span><span class="methodLine"><i>0072</i>                                 } else if (command <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2302</span>==</span> 'B') {                                                                                  
+</span><span class="methodLine"><i>0073</i>                                         moveCursorDown(n);                                                                                    
+</span><span class="methodLine"><i>0074</i>                                 } else if (command <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2503</span>==</span> 'C') {                                                                                  
+</span><span class="methodLine"><i>0075</i>                                         moveCursorForward(n);                                                                                 
+</span><span class="methodLine"><i>0076</i>                                 } else if (command <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2700</span>==</span> 'D') {                                                                                  
+</span><span class="methodLine"><i>0077</i>                                         moveCursorBack(n);                                                                                    
+</span><span class="methodLine"><i>0078</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0079</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0080</i>                         case 'E':                                                                                                             
+</span><span class="methodLine"><i>0081</i>                         case 'F':                                                                                                             
+</span><span class="methodLine"><i>0082</i>                                 n = 1;                                                                                                        
+</span><span class="methodLine"><i>0083</i>                                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2158</span>==</span> 1) {                                                                                 
+</span><span class="methodLine"><i>0084</i>                                         n = Integer.parseInt(parameters[0]);                                                                  
+</span><span class="methodLine"><i>0085</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0086</i>                                 if (command <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2162</span>==</span> 'E') {                                                                                         
+</span><span class="methodLine"><i>0087</i>                                         moveCursorDown(n);                                                                                    
+</span><span class="methodLine"><i>0088</i>                                 } else if (command <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2328</span>==</span> 'F') {                                                                                  
+</span><span class="methodLine"><i>0089</i>                                         moveCursorUp(n);                                                                                      
+</span><span class="methodLine"><i>0090</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0091</i>                                 setCursorColumn(0);                                                                                           
+</span><span class="methodLine"><i>0092</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0093</i>                         case 'G':                                                                                                             
+</span><span class="methodLine"><i>0094</i>                                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2171</span>==</span> 1) {                                                                                 
+</span><span class="methodLine"><i>0095</i>                                         n = Integer.parseInt(parameters[0]);                                                                  
+</span><span class="methodLine"><i>0096</i>                                         setCursorColumn(n <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 3279</span>-</span> 1);                                                                               
+</span><span class="methodLine"><i>0097</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0098</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0099</i>                         case 'H':                                                                                                             
+</span><span class="methodLine"><i>0100</i>                         case 'f':                                                                                                             
+</span><span class="methodLine"><i>0101</i>                                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2177</span>==</span> 2) {                                                                                 
+</span><span class="methodLine"><i>0102</i>                                         n = 1;                                                                                                
+</span><span class="methodLine"><i>0103</i>                                         int m = 1;                                                                                            
+</span><span class="methodLine"><i>0104</i>                                         if (parameters[0].length() <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: <= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2917</span>></span> 0) {                                                                     
+</span><span class="methodLine"><i>0105</i>                                                 n = Integer.parseInt(parameters[0]);                                                          
+</span><span class="methodLine"><i>0106</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0107</i>                                         if (parameters[1].length() <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: <= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2921</span>></span> 0) {                                                                     
+</span><span class="methodLine"><i>0108</i>                                                 m = Integer.parseInt(parameters[1]);                                                          
+</span><span class="methodLine"><i>0109</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0110</i>                                         setCursorRow(n <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 3297</span>-</span> 1);                                                                                  
+</span><span class="methodLine"><i>0111</i>                                         setCursorColumn(m <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 3299</span>-</span> 1);                                                                               
+</span><span class="methodLine"><i>0112</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0113</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0114</i>                         case 'J':                                                                                                             
+</span><span class="methodLine"><i>0115</i>                                 n = 0;                                                                                                        
+</span><span class="methodLine"><i>0116</i>                                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2183</span>==</span> 1) {                                                                                 
+</span><span class="methodLine"><i>0117</i>                                         n = Integer.parseInt(parameters[0]);                                                                  
+</span><span class="methodLine"><i>0118</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0119</i>                                 if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2187</span>==</span> 0) {                                                                                                 
+</span><span class="methodLine"><i>0120</i>                                         int row = cursorRow;                                                                                  
+</span><span class="methodLine"><i>0121</i>                                         int column = cursorColumn;                                                                            
+</span><span class="methodLine"><i>0122</i>                                         while(row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2936</span><</span> rows) {                                                                                   
+</span><span class="methodLine"><i>0123</i>                                                 while(column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3717</span><</span> columns) {                                                                     
+</span><span class="methodLine"><i>0124</i>                                                         cells[row][column] = null;                                                            
+</span><span class="methodLine"><i>0125</i>                                                         column<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 4224</span>++</span>;                                                                             
+</span><span class="methodLine"><i>0126</i>                                                 }                                                                                             
+</span><span class="methodLine"><i>0127</i>                                                 column = 0;                                                                                   
+</span><span class="methodLine"><i>0128</i>                                                 row<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3721</span>++</span>;                                                                                        
+</span><span class="methodLine"><i>0129</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0130</i>                                 } else if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2375</span>==</span> 1) {                                                                                          
+</span><span class="methodLine"><i>0131</i>                                         int row = cursorRow;                                                                                  
+</span><span class="methodLine"><i>0132</i>                                         int column = cursorColumn;                                                                            
+</span><span class="methodLine"><i>0133</i>                                         while(row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3126</span>>=</span> 0) {                                                                                     
+</span><span class="methodLine"><i>0134</i>                                                 while(column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3883</span>>=</span> 0) {                                                                          
+</span><span class="methodLine"><i>0135</i>                                                         cells[row][column] = null;                                                            
+</span><span class="methodLine"><i>0136</i>                                                         column<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: ++ 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 4322</span>--</span>;                                                                             
+</span><span class="methodLine"><i>0137</i>                                                 }                                                                                             
+</span><span class="methodLine"><i>0138</i>                                                 column = columns <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 4018</span>-</span> 1;                                                                         
+</span><span class="methodLine"><i>0139</i>                                                 row<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: ++ 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3887</span>--</span>;                                                                                        
+</span><span class="methodLine"><i>0140</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0141</i>                                 } else if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2570</span>==</span> 2) {                                                                                          
+</span><span class="methodLine"><i>0142</i>                                         clear();                                                                                              
+</span><span class="methodLine"><i>0143</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0144</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0145</i>                         case 'K':                                                                                                             
+</span><span class="methodLine"><i>0146</i>                                 n = 0;                                                                                                        
+</span><span class="methodLine"><i>0147</i>                                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2198</span>==</span> 1) {                                                                                 
+</span><span class="methodLine"><i>0148</i>                                         n = Integer.parseInt(parameters[0]);                                                                  
+</span><span class="methodLine"><i>0149</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0150</i>                                 if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2202</span>==</span> 0) {                                                                                                 
+</span><span class="methodLine"><i>0151</i>                                         for (int row = cursorRow; row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2958</span><</span> rows; row<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3341</span>++</span>) {                                                        
+</span><span class="methodLine"><i>0152</i>                                                 cells[row][cursorColumn] = null;                                                              
+</span><span class="methodLine"><i>0153</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0154</i>                                 } else if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2398</span>==</span> 1) {                                                                                          
+</span><span class="methodLine"><i>0155</i>                                         for (int row = cursorRow; row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3147</span>>=</span> 0; row<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: ++ 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3564</span>--</span>) {                                                          
+</span><span class="methodLine"><i>0156</i>                                                 cells[row][cursorColumn] = null;                                                              
+</span><span class="methodLine"><i>0157</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0158</i>                                 } else if (n <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2591</span>==</span> 2) {                                                                                          
+</span><span class="methodLine"><i>0159</i>                                         for (int column = 0; column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3354</span><</span> columns; column<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3759</span>++</span>) {                                                    
+</span><span class="methodLine"><i>0160</i>                                                 cells[cursorRow][column] = null;                                                              
+</span><span class="methodLine"><i>0161</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0162</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0163</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0164</i>                         case 'm':                                                                                                             
+</span><span class="methodLine"><i>0165</i>                                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2212</span>==</span> 0) {                                                                                 
+</span><span class="methodLine"><i>0166</i>                                         parameters = new String[] { "0" };                                                                    
+</span><span class="methodLine"><i>0167</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0168</i>                                 for (String parameter : parameters) {                                                                         
+</span><span class="methodLine"><i>0169</i>                                         if (parameter.equals("0")) {                                                                          
+</span><span class="methodLine"><i>0170</i>                                                 foregroundColor = DEFAULT_FOREGROUND_COLOR;                                                   
+</span><span class="methodLine"><i>0171</i>                                                 backgroundColor = DEFAULT_BACKGROUND_COLOR;                                                   
+</span><span class="methodLine"><i>0172</i>                                                 backgroundBold = DEFAULT_BACKGROUND_BOLD;                                                     
+</span><span class="methodLine"><i>0173</i>                                                 foregroundBold = DEFAULT_FOREGROUND_BOLD;                                                     
+</span><span class="methodLine"><i>0174</i>                                         } else if (parameter.equals("2")) {                                                                   
+</span><span class="methodLine"><i>0175</i>                                                 backgroundBold = true;                                                                        
+</span><span class="methodLine"><i>0176</i>                                                 foregroundBold = true;                                                                        
+</span><span class="methodLine"><i>0177</i>                                         } else if (parameter.equals("22")) {                                                                  
+</span><span class="methodLine"><i>0178</i>                                                 backgroundBold = false;                                                                       
+</span><span class="methodLine"><i>0179</i>                                                 foregroundBold = false;                                                                       
+</span><span class="methodLine"><i>0180</i>                                         } else if ((parameter.startsWith("3") <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 4062</span>||</span> parameter.startsWith("4")) <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: || 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 3602</span>&&</span> parameter.length() <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3785</span>==</span> 2) {     
+</span><span class="methodLine"><i>0181</i>                                                 int color = Integer.parseInt(parameter.substring(1));                                         
+</span><span class="methodLine"><i>0182</i>                                                 if (parameter.startsWith("3")) {                                                              
+</span><span class="methodLine"><i>0183</i>                                                         foregroundColor = color;                                                              
+</span><span class="methodLine"><i>0184</i>                                                 } else if (parameter.startsWith("4")) {                                                       
+</span><span class="methodLine"><i>0185</i>                                                         backgroundColor = color;                                                              
+</span><span class="methodLine"><i>0186</i>                                                 }                                                                                             
+</span><span class="methodLine"><i>0187</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0188</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0189</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0190</i>                         case 'u':                                                                                                             
+</span><span class="methodLine"><i>0191</i>                                 if (savedCursorColumn <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: == 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2419</span>!=</span> <span class="ArithmeticOperatorReplacementUnary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementUnary 
+Node ID: 2607</span>-</span>1 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: || 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 2219</span>&&</span> savedCursorRow <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: == 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2421</span>!=</span> <span class="ArithmeticOperatorReplacementUnary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementUnary 
+Node ID: 2610</span>-</span>1) {                                                        
+</span><span class="methodLine"><i>0192</i>                                         cursorColumn = savedCursorColumn;                                                                     
+</span><span class="methodLine"><i>0193</i>                                         cursorRow = savedCursorRow;                                                                           
+</span><span class="methodLine"><i>0194</i>                                 }                                                                                                             
+</span><span class="methodLine"><i>0195</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0196</i>                         case 's':                                                                                                             
+</span><span class="methodLine"><i>0197</i>                                 savedCursorColumn = cursorColumn;                                                                             
+</span><span class="methodLine"><i>0198</i>                                 savedCursorRow = cursorRow;                                                                                   
+</span><span class="methodLine"><i>0199</i>                                 break;                                                                                                        
+</span><span class="methodLine"><i>0200</i>                         }                                                                                                                     
+</span><span class="methodLine"><i>0201</i>                 }                                                                                                                             
+</span><span class="outsideLine"><i>0202</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0203</i>                 @Override                                                                                                                     
+</span><span class="methodLine"><i>0204</i>                 public void parsedString(String str) {                                                                                        
+</span><span class="methodLine"><i>0205</i>                         for (char ch : str.toCharArray()) {                                                                                   
+</span><span class="methodLine"><i>0206</i>                                 switch (ch) {                                                                                                 
+</span><span class="methodLine"><i>0207</i>                                 case '\0':                                                                                                    
+</span><span class="methodLine"><i>0208</i>                                         continue;                                                                                             
+</span><span class="methodLine"><i>0209</i>                                 case '\r':                                                                                                    
+</span><span class="methodLine"><i>0210</i>                                         cursorColumn = 0;                                                                                     
+</span><span class="methodLine"><i>0211</i>                                         continue;                                                                                             
+</span><span class="methodLine"><i>0212</i>                                 case '\n':                                                                                                    
+</span><span class="methodLine"><i>0213</i>                                         cursorColumn = 0;                                                                                     
+</span><span class="methodLine"><i>0214</i>                                         cursorRow<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 2995</span>++</span>;                                                                                          
+</span><span class="methodLine"><i>0215</i>                                         continue;                                                                                             
+</span><span class="methodLine"><i>0216</i>                                 case '\t':                                                                                                    
+</span><span class="methodLine"><i>0217</i>                                         while ((<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3792</span>++</span>cursorColumn <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: / 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 3615</span>%</span> TAB_WIDTH) <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: == 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2998</span>!=</span> 0);                                                            
+</span><span class="methodLine"><i>0218</i>                                         continue;                                                                                             
+</span><span class="methodLine"><i>0219</i>                                 case 127:                                                                                                     
+</span><span class="methodLine"><i>0220</i>                                         if (cursorColumn <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: <= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3003</span>></span> 0) {                                                                               
+</span><span class="methodLine"><i>0221</i>                                                 cells[cursorRow][<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: ++ 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 4079</span>--</span>cursorColumn] = null;                                                      
+</span><span class="methodLine"><i>0222</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0223</i>                                         continue;                                                                                             
+</span><span class="methodLine"><i>0224</i>                                 case 7:                                                                                                       
+</span><span class="methodLine"><i>0225</i>                                         bellStrategy.soundBell();                                                                             
+</span><span class="methodLine"><i>0226</i>                                         continue;                                                                                             
+</span><span class="methodLine"><i>0227</i>                                 }                                                                                                             
+</span><span class="outsideLine"><i>0228</i>                                                                                                                                               
+</span><span class="methodLine"><i>0229</i>                                 if (cursorColumn <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2456</span>>=</span> columns) {                                                                                
+</span><span class="methodLine"><i>0230</i>                                         cursorColumn = 0;                                                                                     
+</span><span class="methodLine"><i>0231</i>                                         cursorRow<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3215</span>++</span>;                                                                                          
+</span><span class="methodLine"><i>0232</i>                                 }                                                                                                             
+</span><span class="outsideLine"><i>0233</i>                                                                                                                                               
+</span><span class="methodLine"><i>0234</i>                                 if (cursorRow <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 2460</span>>=</span> bufferSize) {                                                                                
+</span><span class="methodLine"><i>0235</i>                                         for (int i = 1; i <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3218</span><</span> bufferSize; i<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3630</span>++</span>) {                                                                
+</span><span class="methodLine"><i>0236</i>                                                 System.arraycopy(cells[i], 0, cells[i <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 4298</span>-</span> 1], 0, columns);                                      
+</span><span class="methodLine"><i>0237</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0238</i>                                         for (int i = 0; i <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 3224</span><</span> columns; i<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3636</span>++</span>) {                                                                   
+</span><span class="methodLine"><i>0239</i>                                                 cells[bufferSize <span class="ArithmeticOperatorReplacementBinary tooltip"><span class="tooltiptext">Mutated Text: + 
+Mutation Operator Type: ArithmeticOperatorReplacementBinary 
+Node ID: 4305</span>-</span> 1][i] = null;                                                              
+</span><span class="methodLine"><i>0240</i>                                         }                                                                                                     
+</span><span class="methodLine"><i>0241</i>                                         cursorRow<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: ++ 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 3228</span>--</span>;                                                                                          
+</span><span class="methodLine"><i>0242</i>                                 }                                                                                                             
+</span><span class="outsideLine"><i>0243</i>                                                                                                                                               
+</span><span class="methodLine"><i>0244</i>                                 Color back = backgroundBold ? SgrColor.COLOR_BRIGHT[backgroundColor] : SgrColor.COLOR_NORMAL[backgroundColor];
+</span><span class="methodLine"><i>0245</i>                                 Color fore = foregroundBold ? SgrColor.COLOR_BRIGHT[foregroundColor] : SgrColor.COLOR_NORMAL[foregroundColor];
+</span><span class="methodLine"><i>0246</i>                                 cells[cursorRow][cursorColumn<span class="ArithmeticOperatorReplacementShortcut tooltip"><span class="tooltiptext">Mutated Text: -- 
+Mutation Operator Type: ArithmeticOperatorReplacementShortcut 
+Node ID: 2865</span>++</span>] = new TerminalCell(ch, back, fore);                                          
+</span><span class="methodLine"><i>0247</i>                         }                                                                                                                     
+</span><span class="methodLine"><i>0248</i>                 }                                                                                                                             
+</span><span class="outsideLine"><i>0249</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0250</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0251</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0252</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0253</i>          * The default number of columns.                                                                                                     
+</span><span class="outsideLine"><i>0254</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0255</i>         private static final int DEFAULT_COLUMNS = 80;                                                                                        
+</span><span class="outsideLine"><i>0256</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0257</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0258</i>          * The default number of rows.                                                                                                        
+</span><span class="outsideLine"><i>0259</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0260</i>         private static final int DEFAULT_ROWS = 25;                                                                                           
+</span><span class="outsideLine"><i>0261</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0262</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0263</i>          * The tab width in characters.                                                                                                       
+</span><span class="outsideLine"><i>0264</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0265</i>         private static final int TAB_WIDTH = 8;                                                                                               
+</span><span class="outsideLine"><i>0266</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0267</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0268</i>          * The default foreground bold flag.                                                                                                  
+</span><span class="outsideLine"><i>0269</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0270</i>         private static final boolean DEFAULT_FOREGROUND_BOLD = false;                                                                         
+</span><span class="outsideLine"><i>0271</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0272</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0273</i>          * The default background bold flag.                                                                                                  
+</span><span class="outsideLine"><i>0274</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0275</i>         private static final boolean DEFAULT_BACKGROUND_BOLD = false;                                                                         
+</span><span class="outsideLine"><i>0276</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0277</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0278</i>          * The default foreground color.                                                                                                      
+</span><span class="outsideLine"><i>0279</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0280</i>         private static final int DEFAULT_FOREGROUND_COLOR = 7;                                                                                
+</span><span class="outsideLine"><i>0281</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0282</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0283</i>          * The default background color.                                                                                                      
+</span><span class="outsideLine"><i>0284</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0285</i>         private static final int DEFAULT_BACKGROUND_COLOR = 0;                                                                                
+</span><span class="outsideLine"><i>0286</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0287</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0288</i>          * The ANSI control sequence listener.                                                                                                
+</span><span class="outsideLine"><i>0289</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0290</i>         private final AnsiControlSequenceListener listener = this.new Vt100Listener();                                                        
+</span><span class="outsideLine"><i>0291</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0292</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0293</i>          * The ANSI control sequence parser.                                                                                                  
+</span><span class="outsideLine"><i>0294</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0295</i>         private final AnsiControlSequenceParser parser = new AnsiControlSequenceParser(listener);                                             
+</span><span class="outsideLine"><i>0296</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0297</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0298</i>          * The current bell strategy.                                                                                                         
+</span><span class="outsideLine"><i>0299</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0300</i>         private BellStrategy bellStrategy = new NopBellStrategy();                                                                            
+</span><span class="outsideLine"><i>0301</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0302</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0303</i>          * The array of cells.                                                                                                                
+</span><span class="outsideLine"><i>0304</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0305</i>         private TerminalCell[][] cells;                                                                                                       
+</span><span class="outsideLine"><i>0306</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0307</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0308</i>          * The number of columns.                                                                                                             
+</span><span class="outsideLine"><i>0309</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0310</i>         private int columns;                                                                                                                  
+</span><span class="outsideLine"><i>0311</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0312</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0313</i>          * The number of rows.                                                                                                                
+</span><span class="outsideLine"><i>0314</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0315</i>         private int rows;                                                                                                                     
+</span><span class="outsideLine"><i>0316</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0317</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0318</i>          * The buffer size.                                                                                                                   
+</span><span class="outsideLine"><i>0319</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0320</i>         private int bufferSize;                                                                                                               
+</span><span class="outsideLine"><i>0321</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0322</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0323</i>          * The cursor row.                                                                                                                    
+</span><span class="outsideLine"><i>0324</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0325</i>         private int cursorRow = 0;                                                                                                            
+</span><span class="outsideLine"><i>0326</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0327</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0328</i>          * The cursor column.                                                                                                                 
+</span><span class="outsideLine"><i>0329</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0330</i>         private int cursorColumn = 0;                                                                                                         
+</span><span class="outsideLine"><i>0331</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0332</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0333</i>          * The current foreground bold flag.                                                                                                  
+</span><span class="outsideLine"><i>0334</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0335</i>         private boolean foregroundBold = DEFAULT_FOREGROUND_BOLD;                                                                             
+</span><span class="outsideLine"><i>0336</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0337</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0338</i>          * The current background bold flag.                                                                                                  
+</span><span class="outsideLine"><i>0339</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0340</i>         private boolean backgroundBold = DEFAULT_BACKGROUND_BOLD;                                                                             
+</span><span class="outsideLine"><i>0341</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0342</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0343</i>          * The current foreground color.                                                                                                      
+</span><span class="outsideLine"><i>0344</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0345</i>         private int foregroundColor = DEFAULT_FOREGROUND_COLOR;                                                                               
+</span><span class="outsideLine"><i>0346</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0347</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0348</i>          * The current background color.                                                                                                      
+</span><span class="outsideLine"><i>0349</i>          */                                                                                                                                   
+</span><span class="outsideLine"><i>0350</i>         private int backgroundColor = DEFAULT_BACKGROUND_COLOR;                                                                               
+</span><span class="outsideLine"><i>0351</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0352</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0353</i>          * Creates the terminal model with the default number of columns and rows,                                                            
+</span><span class="outsideLine"><i>0354</i>          * and the default buffer size.                                                                                                       
+</span><span class="outsideLine"><i>0355</i>          */                                                                                                                                   
+</span><span class="methodLine"><i>0356</i>         public Vt100TerminalModel() {                                                                                                         
+</span><span class="methodLine"><i>0357</i>                 this(DEFAULT_COLUMNS, DEFAULT_ROWS);                                                                                          
+</span><span class="methodLine"><i>0358</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0359</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0360</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0361</i>          * Creates the terminal model with the specified number of columns and                                                                
+</span><span class="outsideLine"><i>0362</i>          * rows. The buffer size is set to the number of rows.                                                                                
+</span><span class="outsideLine"><i>0363</i>          * @param columns The number of columns.                                                                                              
+</span><span class="outsideLine"><i>0364</i>          * @param rows The number of rows.                                                                                                    
+</span><span class="outsideLine"><i>0365</i>          * @throws IllegalArgumentException if the number of rows or columns is                                                               
+</span><span class="outsideLine"><i>0366</i>          * negative.                                                                                                                          
+</span><span class="outsideLine"><i>0367</i>          */                                                                                                                                   
+</span><span class="methodLine"><i>0368</i>         public Vt100TerminalModel(int columns, int rows) {                                                                                    
+</span><span class="methodLine"><i>0369</i>                 this(columns, rows, rows);                                                                                                    
+</span><span class="methodLine"><i>0370</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0371</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0372</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0373</i>          * Creates the terminal model with the specified number of columns and rows                                                           
+</span><span class="outsideLine"><i>0374</i>          * and the specified buffer size.                                                                                                     
+</span><span class="outsideLine"><i>0375</i>          * @param columns The number of columns.                                                                                              
+</span><span class="outsideLine"><i>0376</i>          * @param rows The number of rows.                                                                                                    
+</span><span class="outsideLine"><i>0377</i>          * @param bufferSize The buffer size.                                                                                                 
+</span><span class="outsideLine"><i>0378</i>          * @throws IllegalArgumentException if the number of rows or columns is                                                               
+</span><span class="outsideLine"><i>0379</i>          * negative, or if the buffer size is less than the number of rows.                                                                   
+</span><span class="outsideLine"><i>0380</i>          */                                                                                                                                   
+</span><span class="methodLine"><i>0381</i>         public Vt100TerminalModel(int columns, int rows, int bufferSize) {                                                                    
+</span><span class="methodLine"><i>0382</i>                 if (columns <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1472</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1327</span>||</span> rows <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1474</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1208</span>||</span> bufferSize <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1329</span><</span> 0) {                                                                              
+</span><span class="methodLine"><i>0383</i>                         throw new IllegalArgumentException("Zero or positive values only allowed for columns, rows and buffer size.");        
+</span><span class="methodLine"><i>0384</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0385</i>                 if (bufferSize <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1212</span><</span> rows) {                                                                                                      
+</span><span class="methodLine"><i>0386</i>                         throw new IllegalArgumentException("The buffer is too small");                                                        
+</span><span class="methodLine"><i>0387</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0388</i>                 this.columns = columns;                                                                                                       
+</span><span class="methodLine"><i>0389</i>                 this.rows = rows;                                                                                                             
+</span><span class="methodLine"><i>0390</i>                 this.bufferSize = bufferSize;                                                                                                 
+</span><span class="methodLine"><i>0391</i>                 init();                                                                                                                       
+</span><span class="methodLine"><i>0392</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0393</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0394</i>         /**                                                                                                                                   
+</span><span class="outsideLine"><i>0395</i>          * Initializes the terminal model.                                                                                                    
+</span><span class="outsideLine"><i>0396</i>          */                                                                                                                                   
+</span><span class="methodLine"><i>0397</i>         private void init() {                                                                                                                 
+</span><span class="methodLine"><i>0398</i>                 cells = new TerminalCell[bufferSize][columns];                                                                                
+</span><span class="methodLine"><i>0399</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0400</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0401</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0402</i>         public int getCursorRow() {                                                                                                           
+</span><span class="methodLine"><i>0403</i>                 return cursorRow;                                                                                                             
+</span><span class="methodLine"><i>0404</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0405</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0406</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0407</i>         public void setCursorRow(int row) {                                                                                                   
+</span><span class="methodLine"><i>0408</i>                 if (row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1355</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1223</span>||</span> row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1357</span>>=</span> bufferSize) {                                                                                           
+</span><span class="methodLine"><i>0409</i>                         throw new IllegalArgumentException("row out of range");                                                               
+</span><span class="methodLine"><i>0410</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0411</i>                 cursorRow = row;                                                                                                              
+</span><span class="methodLine"><i>0412</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0413</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0414</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0415</i>         public int getCursorColumn() {                                                                                                        
+</span><span class="methodLine"><i>0416</i>                 return cursorColumn;                                                                                                          
+</span><span class="methodLine"><i>0417</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0418</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0419</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0420</i>         public void setCursorColumn(int column) {                                                                                             
+</span><span class="methodLine"><i>0421</i>                 if (column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1365</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1230</span>||</span> column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1367</span>>=</span> columns) {                                                                                        
+</span><span class="methodLine"><i>0422</i>                         throw new IllegalArgumentException("column out of range");                                                            
+</span><span class="methodLine"><i>0423</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0424</i>                 cursorColumn = column;                                                                                                        
+</span><span class="methodLine"><i>0425</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0426</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0427</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0428</i>         public TerminalCell getCell(int column, int row) {                                                                                    
+</span><span class="methodLine"><i>0429</i>                 if (column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1660</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1516</span>||</span> row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1662</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1374</span>||</span> column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1518</span>>=</span> columns <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1237</span>||</span> row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1376</span>>=</span> bufferSize) {                                                        
+</span><span class="methodLine"><i>0430</i>                         throw new IndexOutOfBoundsException();                                                                                
+</span><span class="methodLine"><i>0431</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0432</i>                 return cells[row][column];                                                                                                    
+</span><span class="methodLine"><i>0433</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0434</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0435</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0436</i>         public void setCell(int column, int row, TerminalCell cell) {                                                                         
+</span><span class="methodLine"><i>0437</i>                 if (column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1673</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1526</span>||</span> row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: >= 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1675</span><</span> 0 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1385</span>||</span> column <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1528</span>>=</span> columns <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: && 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 1248</span>||</span> row <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: < 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1387</span>>=</span> bufferSize) {                                                        
+</span><span class="methodLine"><i>0438</i>                         throw new IndexOutOfBoundsException();                                                                                
+</span><span class="methodLine"><i>0439</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0440</i>                 cells[row][column] = cell;                                                                                                    
+</span><span class="methodLine"><i>0441</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0442</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0443</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0444</i>         public void print(String str) {                                                                                                       
+</span><span class="methodLine"><i>0445</i>                 if (str <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1254</span>==</span> null) {                                                                                                            
+</span><span class="methodLine"><i>0446</i>                         throw new NullPointerException("str");                                                                                
+</span><span class="methodLine"><i>0447</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0448</i>                 parser.parse(str);                                                                                                            
+</span><span class="methodLine"><i>0449</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0450</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0451</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0452</i>         public int getColumns() {                                                                                                             
+</span><span class="methodLine"><i>0453</i>                 return columns;                                                                                                               
+</span><span class="methodLine"><i>0454</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0455</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0456</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0457</i>         public int getRows() {                                                                                                                
+</span><span class="methodLine"><i>0458</i>                 return rows;                                                                                                                  
+</span><span class="methodLine"><i>0459</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0460</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0461</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0462</i>         public int getBufferSize() {                                                                                                          
+</span><span class="methodLine"><i>0463</i>                 return bufferSize;                                                                                                            
+</span><span class="methodLine"><i>0464</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0465</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0466</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0467</i>         public BellStrategy getBellStrategy() {                                                                                               
+</span><span class="methodLine"><i>0468</i>                 return bellStrategy;                                                                                                          
+</span><span class="methodLine"><i>0469</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0470</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0471</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0472</i>         public void setBellStrategy(BellStrategy strategy) {                                                                                  
+</span><span class="methodLine"><i>0473</i>                 if (strategy <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 1264</span>==</span> null) {                                                                                                       
+</span><span class="methodLine"><i>0474</i>                         throw new NullPointerException("strategy");                                                                           
+</span><span class="methodLine"><i>0475</i>                 }                                                                                                                             
+</span><span class="methodLine"><i>0476</i>                 this.bellStrategy = strategy;                                                                                                 
+</span><span class="methodLine"><i>0477</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0478</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0479</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0480</i>         public Color getDefaultBackgroundColor() {                                                                                            
+</span><span class="methodLine"><i>0481</i>                 final int bg = DEFAULT_BACKGROUND_COLOR;                                                                                      
+</span><span class="methodLine"><i>0482</i>                 return DEFAULT_BACKGROUND_BOLD ? SgrColor.COLOR_BRIGHT[bg] : SgrColor.COLOR_NORMAL[bg];                                       
+</span><span class="methodLine"><i>0483</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0484</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0485</i>         @Override                                                                                                                             
+</span><span class="methodLine"><i>0486</i>         public Color getDefaultForegroundColor() {                                                                                            
+</span><span class="methodLine"><i>0487</i>                 final int fg = DEFAULT_FOREGROUND_COLOR;                                                                                      
+</span><span class="methodLine"><i>0488</i>                 return DEFAULT_FOREGROUND_BOLD ? SgrColor.COLOR_BRIGHT[fg] : SgrColor.COLOR_NORMAL[fg];                                       
+</span><span class="methodLine"><i>0489</i>         }                                                                                                                                     
+</span><span class="outsideLine"><i>0490</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0491</i> }                                                                                                                                             
+</span><span class="outsideLine"><i>0492</i>                                                                                                                                               
+</span><span class="outsideLine"><i>0493</i>                                                                                                                                               </pre></div><footer><p style="font-size: small">Report generated by LittleDarwin 0.10.6 </p></footer></body></html>

@@ -1,0 +1,3 @@
+AnsiControlSequence.AnsiControlSequence( char command , String [ ] parameters );3;4;11
+AnsiControlSequence.getCommand( );0;1;3
+AnsiControlSequence.getParameters( );0;1;3

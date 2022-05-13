@@ -1,0 +1,92 @@
+<!DOCTYPE html><head><title>LittleDarwin Aggregate Mutation Report</title> <style type='text/css'> body { font-family: "Carlito", "Calibri", "Helvetica Neue", sans-serif;}
+                    .code { font-family: monospace; font-size: medium; }
+                    .methodLine { background: white; }
+                    .outsideLine { background: lightgray; } 
+                    .tooltip { position: relative; display: inline-block; }
+                    .tooltip .tooltiptext { visibility: hidden; display: block;
+                        background-color: #006400; color: #ffffff; text-align: left;
+                        border-radius: 0.3em; padding: 0.5em 0.5em; position: absolute; top: 125%; z-index: 200;}
+                    .tooltip:hover .tooltiptext { visibility: visible; } .LogicalOperatorReplacement { background: #F0E68C; } .ShiftOperatorReplacement { background: #9ACD32; } .ConditionalOperatorReplacement { background: #87CEFA; } .ArithmeticOperatorReplacementBinary { background: #FFB6C1; } .ArithmeticOperatorReplacementShortcut { background: #FF00FF; } .RelationalOperatorReplacement { background: #FFA07A; } .ConditionalOperatorDeletion { background: #FFD700; } .ArithmeticOperatorReplacementUnary { background: #DDA0DD; } .GenericTraditionalMutationOperator { background: #FFFFF0; } .AssignmentOperatorReplacementShortcut { background: #B0C4DE; } </style></head><body><h1>LittleDarwin Aggregate Mutation Report</h1><p>Average Density: 0.18</p><div><pre class="code"><span class="outsideLine"><i>0001</i> /*                                                                              
+</span><span class="outsideLine"><i>0002</i>  * Copyright (c) 2009-2011 Graham Edgecombe.                                    
+</span><span class="outsideLine"><i>0003</i>  *                                                                              
+</span><span class="outsideLine"><i>0004</i>  * Permission is hereby granted, free of charge, to any person obtaining a copy 
+</span><span class="outsideLine"><i>0005</i>  * of this software and associated documentation files (the "Software"), to     
+</span><span class="outsideLine"><i>0006</i>  * deal in the Software without restriction, including without limitation the   
+</span><span class="outsideLine"><i>0007</i>  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or  
+</span><span class="outsideLine"><i>0008</i>  * sell copies of the Software, and to permit persons to whom the Software is   
+</span><span class="outsideLine"><i>0009</i>  * furnished to do so, subject to the following conditions:                     
+</span><span class="outsideLine"><i>0010</i>  *                                                                              
+</span><span class="outsideLine"><i>0011</i>  * The above copyright notice and this permission notice shall be included in   
+</span><span class="outsideLine"><i>0012</i>  * all copies or substantial portions of the Software.                          
+</span><span class="outsideLine"><i>0013</i>  *                                                                              
+</span><span class="outsideLine"><i>0014</i>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR   
+</span><span class="outsideLine"><i>0015</i>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,     
+</span><span class="outsideLine"><i>0016</i>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  
+</span><span class="outsideLine"><i>0017</i>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER       
+</span><span class="outsideLine"><i>0018</i>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      
+</span><span class="outsideLine"><i>0019</i>  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          
+</span><span class="outsideLine"><i>0020</i>  * DEALINGS IN THE SOFTWARE.                                                    
+</span><span class="outsideLine"><i>0021</i>  */                                                                             
+</span><span class="outsideLine"><i>0022</i>                                                                                 
+</span><span class="outsideLine"><i>0023</i> package com.grahamedgecombe.jterminal.vt100;                                    
+</span><span class="outsideLine"><i>0024</i>                                                                                 
+</span><span class="outsideLine"><i>0025</i> /**                                                                             
+</span><span class="outsideLine"><i>0026</i>  * Represents an ANSI control sequence.                                         
+</span><span class="outsideLine"><i>0027</i>  * @author Graham Edgecombe                                                     
+</span><span class="outsideLine"><i>0028</i>  */                                                                             
+</span><span class="outsideLine"><i>0029</i> class AnsiControlSequence {                                                     
+</span><span class="outsideLine"><i>0030</i>                                                                                 
+</span><span class="outsideLine"><i>0031</i>         /**                                                                     
+</span><span class="outsideLine"><i>0032</i>          * The command character.                                               
+</span><span class="outsideLine"><i>0033</i>          */                                                                     
+</span><span class="outsideLine"><i>0034</i>         private final char command;                                             
+</span><span class="outsideLine"><i>0035</i>                                                                                 
+</span><span class="outsideLine"><i>0036</i>         /**                                                                     
+</span><span class="outsideLine"><i>0037</i>          * The parameters.                                                      
+</span><span class="outsideLine"><i>0038</i>          */                                                                     
+</span><span class="outsideLine"><i>0039</i>         private final String[] parameters;                                      
+</span><span class="outsideLine"><i>0040</i>                                                                                 
+</span><span class="outsideLine"><i>0041</i>         /**                                                                     
+</span><span class="outsideLine"><i>0042</i>          * Creates an ANSI control sequence with the specified command and      
+</span><span class="outsideLine"><i>0043</i>          * parameters.                                                          
+</span><span class="outsideLine"><i>0044</i>          * @param command The command character.                                
+</span><span class="outsideLine"><i>0045</i>          * @param parameters The parameters array.                              
+</span><span class="outsideLine"><i>0046</i>          * @throws NullPointerException if the parameters array is {@code null}.
+</span><span class="outsideLine"><i>0047</i>          */                                                                     
+</span><span class="methodLine"><i>0048</i>         public AnsiControlSequence(char command, String[] parameters) {         
+</span><span class="methodLine"><i>0049</i>                 if (parameters <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 150</span>==</span> null) {                                       
+</span><span class="methodLine"><i>0050</i>                         throw new NullPointerException("parameters");           
+</span><span class="methodLine"><i>0051</i>                 }                                                               
+</span><span class="methodLine"><i>0052</i>                 this.command = command;                                         
+</span><span class="methodLine"><i>0053</i>                 if (parameters.length <span class="RelationalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: != 
+Mutation Operator Type: RelationalOperatorReplacement 
+Node ID: 170</span>==</span> 1 <span class="ConditionalOperatorReplacement tooltip"><span class="tooltiptext">Mutated Text: || 
+Mutation Operator Type: ConditionalOperatorReplacement 
+Node ID: 155</span>&&</span> parameters[0].equals("")) {       
+</span><span class="methodLine"><i>0054</i>                         this.parameters = new String[0];                        
+</span><span class="methodLine"><i>0055</i>                 } else {                                                        
+</span><span class="methodLine"><i>0056</i>                         this.parameters = parameters.clone();                   
+</span><span class="methodLine"><i>0057</i>                 }                                                               
+</span><span class="methodLine"><i>0058</i>         }                                                                       
+</span><span class="outsideLine"><i>0059</i>                                                                                 
+</span><span class="outsideLine"><i>0060</i>         /**                                                                     
+</span><span class="outsideLine"><i>0061</i>          * Gets the command character.                                          
+</span><span class="outsideLine"><i>0062</i>          * @return The command character.                                       
+</span><span class="outsideLine"><i>0063</i>          */                                                                     
+</span><span class="methodLine"><i>0064</i>         public char getCommand() {                                              
+</span><span class="methodLine"><i>0065</i>                 return command;                                                 
+</span><span class="methodLine"><i>0066</i>         }                                                                       
+</span><span class="outsideLine"><i>0067</i>                                                                                 
+</span><span class="outsideLine"><i>0068</i>         /**                                                                     
+</span><span class="outsideLine"><i>0069</i>          * Gets the parameters array.                                           
+</span><span class="outsideLine"><i>0070</i>          * @return The parameters array.                                        
+</span><span class="outsideLine"><i>0071</i>          */                                                                     
+</span><span class="methodLine"><i>0072</i>         public String[] getParameters() {                                       
+</span><span class="methodLine"><i>0073</i>                 return parameters;                                              
+</span><span class="methodLine"><i>0074</i>         }                                                                       
+</span><span class="outsideLine"><i>0075</i>                                                                                 
+</span><span class="outsideLine"><i>0076</i> }                                                                               
+</span><span class="outsideLine"><i>0077</i>                                                                                 
+</span><span class="outsideLine"><i>0078</i>                                                                                 </pre></div><footer><p style="font-size: small">Report generated by LittleDarwin 0.10.6 </p></footer></body></html>

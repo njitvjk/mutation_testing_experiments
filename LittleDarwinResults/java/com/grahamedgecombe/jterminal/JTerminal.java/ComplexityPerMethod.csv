@@ -1,0 +1,13 @@
+JTerminal.JTerminal( );0;1;3
+JTerminal.JTerminal( TerminalModel model );0;1;4
+JTerminal.adjustmentValueChanged( AdjustmentEvent evt );0;1;3
+JTerminal.getModel( );0;1;3
+JTerminal.init( );2;2;17
+JTerminal.print( String str );0;1;3
+JTerminal.println( String str );1;2;6
+JTerminal.setModel( TerminalModel model );1;2;6
+Terminal.Terminal( );0;1;3
+Terminal.getMaximumSize( );0;1;3
+Terminal.getMinimumSize( );2;1;3
+Terminal.getPreferredSize( );0;1;3
+Terminal.paint( Graphics g );17;10;25

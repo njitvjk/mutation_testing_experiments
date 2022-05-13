@@ -1,0 +1,4 @@
+TerminalCell.TerminalCell( char character , Color backgroundColor , Color foregroundColor );2;3;11
+TerminalCell.getBackgroundColor( );0;1;3
+TerminalCell.getCharacter( );0;1;3
+TerminalCell.getForegroundColor( );0;1;3
